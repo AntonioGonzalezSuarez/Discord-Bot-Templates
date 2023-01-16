@@ -56,7 +56,7 @@ class CustomBot(BaseBot):
             )
 
     def start(self):
-        self.bot.run(self.token)
+        self.bot.run(self.discord_token)
 
     def update_guilds(self):
         for guild in self.bot.guilds:

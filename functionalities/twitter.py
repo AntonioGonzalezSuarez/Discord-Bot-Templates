@@ -4,29 +4,51 @@ import os
 from typing import List, Union
 
 load_dotenv()
-api_key = os.getenv("TWITTER_API_KEY")
-api_secret = os.getenv("TWITTER_API_KEY_SECRET")
-access_token = os.getenv("TWITTER_ACCESS_TOKEN")
-access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
-bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
 
 
-def get_client():
+def get_client(
+    bearer_token=os.getenv("TWITTER_BEARER_TOKEN"),
+    api_key=os.getenv("TWITTER_API_KEY"),
+    api_secret=os.getenv("TWITTER_API_KEY_SECRET"),
+    access_token=os.getenv("TWITTER_ACCESS_TOKEN"),
+    access_token_secret=os.getenv("TWITTER_ACCESS_TOKEN_SECRET"),
+):
+    if (
+        api_key is None
+        or api_secret is None
+        or access_token is None
+        or access_token_secret is None
+        or bearer_token is None
+    ):
+        print("Missing twitter tokens to create client")
+        raise Exception("Missing authorization to tweet")
     client = tweepy.Client(
         bearer_token, api_key, api_secret, access_token, access_token_secret
     )
     return client
 
 
-def get_api():
+def get_api(
+    api_key=os.getenv("TWITTER_API_KEY"),
+    api_secret=os.getenv("TWITTER_API_KEY_SECRET"),
+    access_token=os.getenv("TWITTER_ACCESS_TOKEN"),
+    access_token_secret=os.getenv("TWITTER_ACCESS_TOKEN_SECRET"),
+):
+    if (
+        api_key is None
+        or api_secret is None
+        or access_token is None
+        or access_token_secret is None
+    ):
+        raise Exception("Missing tokens")
     auth = tweepy.OAuth1UserHandler(
         api_key, api_secret, access_token, access_token_secret
     )
     return tweepy.API(auth)
 
 
-def send_tweet(tweet_text: str, media_url: str = None):
-    client = get_client()
+def send_tweet(tweet_text: str, media_url: str = None, **kwargs):
+    client = get_client(**kwargs)
     extra_args = {}
     if media_url is not None:
         api = get_api()
