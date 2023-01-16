@@ -5,6 +5,8 @@ from discord.ext.commands import Bot
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
 class BaseBot:
     def __init__(self, discord_token, command_prefix="!"):
         super().__init__()

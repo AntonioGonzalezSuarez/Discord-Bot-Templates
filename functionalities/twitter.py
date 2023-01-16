@@ -4,29 +4,26 @@ import os
 from typing import List, Union
 
 load_dotenv()
-api_key = os.getenv('TWITTER_API_KEY')
-api_secret = os.getenv('TWITTER_API_KEY_SECRET')
-access_token = os.getenv('TWITTER_ACCESS_TOKEN')
-access_token_secret = os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
-bearer_token = os.getenv('TWITTER_BEARER_TOKEN')
+api_key = os.getenv("TWITTER_API_KEY")
+api_secret = os.getenv("TWITTER_API_KEY_SECRET")
+access_token = os.getenv("TWITTER_ACCESS_TOKEN")
+access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
+
 
 def get_client():
     client = tweepy.Client(
-        bearer_token,
-        api_key,
-        api_secret,
-        access_token,
-        access_token_secret)
+        bearer_token, api_key, api_secret, access_token, access_token_secret
+    )
     return client
+
 
 def get_api():
     auth = tweepy.OAuth1UserHandler(
-        api_key,
-        api_secret,
-        access_token,
-        access_token_secret
+        api_key, api_secret, access_token, access_token_secret
     )
     return tweepy.API(auth)
+
 
 def send_tweet(tweet_text: str, media_url: str = None):
     client = get_client()
@@ -54,11 +51,16 @@ def get_tweets(username=None):
     client = get_client()
     if username is None:
         username = client.get_me().data["username"]
-    tweets = client.search_recent_tweets(query=f"from:{username}", user_auth=True, tweet_fields=["created_at"]).data
+    tweets = client.search_recent_tweets(
+        query=f"from:{username}", user_auth=True, tweet_fields=["created_at"]
+    ).data
     result = {}
     if tweets is None:
         return result
     for tw in tweets:
         result[tw.id] = {}
-        result[tw.id] = {'text': tw.text, 'utc_time_post': tw.created_at.strftime("%d/%m/%Y, %H:%M:%S")}
+        result[tw.id] = {
+            "text": tw.text,
+            "utc_time_post": tw.created_at.strftime("%d/%m/%Y, %H:%M:%S"),
+        }
     return result
