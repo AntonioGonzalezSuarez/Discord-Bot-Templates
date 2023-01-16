@@ -1,2 +1,2 @@
-# F1enelChat
-Bot de F1enelChat
+# Discord-Bot-Templates
+Proyecto para crear bots de discord
