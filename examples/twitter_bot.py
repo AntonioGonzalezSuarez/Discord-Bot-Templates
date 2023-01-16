@@ -80,4 +80,6 @@ class TwitterBot(BaseBot):
             json.dump(self.guilds, f, indent=4)
 
 
-TwitterBot().start()
+if __name__ == "__main__":
+    twitter_bot = TwitterBot()
+    twitter_bot.start()
